@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration>
+
+    <appender name="file"
+              class="ch.qos.logback.core.FileAppender">
+        <append>false</append>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%-5p] [%-5.5t] [%-40.40c{0}] {%mdc} %m%n</pattern>
+        </encoder>
+        <file>revelation.log</file>
+    </appender>
+
+    <logger name="org.springframework.beans.factory.support" level="DEBUG"/>
+
+    <root level="INFO">
+        <appender-ref ref="file"/>
+    </root>
+
+</configuration>
