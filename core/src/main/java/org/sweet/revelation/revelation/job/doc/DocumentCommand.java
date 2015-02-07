@@ -22,7 +22,7 @@ public class DocumentCommand implements MultiThreadCommand.HasMultiThreadCommand
     @Description("Documentation's build number")
     private String buildNumber;
 
-    private String confluenceUrl = "http://confluence-eqd.bfi.echonet/confluence/display";
+    private String confluenceUrl;
 
     private String confluenceSpace;
 
