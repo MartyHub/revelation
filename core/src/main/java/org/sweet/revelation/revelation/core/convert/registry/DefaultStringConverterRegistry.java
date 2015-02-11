@@ -1,7 +1,8 @@
 package org.sweet.revelation.revelation.core.convert.registry;
 
-import org.sweet.revelation.revelation.core.convert.impl.*;
 import org.joda.time.DateTimeZone;
+import org.sweet.revelation.revelation.core.Folder;
+import org.sweet.revelation.revelation.core.convert.impl.*;
 
 import java.io.File;
 import java.math.BigDecimal;
@@ -19,6 +20,7 @@ public class DefaultStringConverterRegistry extends SimpleStringConverterRegistr
         register(Double.class, new StringToDoubleConverter());
         register(File.class, new StringToFileConverter());
         register(Float.class, new StringToFloatConverter());
+        register(Folder.class, new StringToFolderConverter());
         register(Integer.class, new StringToIntegerConverter());
         register(Long.class, new StringToLongConverter());
         register(Properties.class, new StringToPropertiesConverter());

@@ -1,6 +1,7 @@
 package org.sweet.revelation.revelation.core.command;
 
 import org.sweet.revelation.revelation.core.Description;
+import org.sweet.revelation.revelation.core.Folder;
 import org.sweet.revelation.revelation.core.log.Work;
 
 import java.io.File;
@@ -21,7 +22,7 @@ public class InputFilesCommand implements ValidatableCommand {
     private File[] inputFiles;
 
     @Description("Input folder to scan")
-    private File inputFolder;
+    private Folder inputFolder;
 
     @Description("Regex to filter files by name")
     private String inputFilePattern = ".*";
@@ -36,7 +37,7 @@ public class InputFilesCommand implements ValidatableCommand {
         this.inputFiles = inputFiles;
     }
 
-    public InputFilesCommand(File inputFolder, String inputFilePattern, final boolean recursive) {
+    public InputFilesCommand(Folder inputFolder, String inputFilePattern, final boolean recursive) {
         this.inputFolder = inputFolder;
         this.inputFilePattern = inputFilePattern;
         this.recursive = recursive;
@@ -58,11 +59,11 @@ public class InputFilesCommand implements ValidatableCommand {
         this.inputFiles = inputFiles;
     }
 
-    public File getInputFolder() {
+    public Folder getInputFolder() {
         return inputFolder;
     }
 
-    public void setInputFolder(File inputFolder) {
+    public void setInputFolder(Folder inputFolder) {
         this.inputFolder = inputFolder;
     }
 
@@ -92,14 +93,14 @@ public class InputFilesCommand implements ValidatableCommand {
         } else {
             work.info(String.format("scan %s%s for %s files", recursive ? "recursively " : "", inputFolder, inputFilePattern));
 
-            return scanFolder(inputFolder, inputFilePattern, recursive);
+            return scanFolder();
         }
     }
 
-    private Collection<File> scanFolder(File folder, final String pattern, final boolean recursive) {
-        return addFiles(new ArrayList<File>(), folder, new FileFilter() {
+    private Collection<File> scanFolder() {
+        return addFiles(new ArrayList<File>(), inputFolder.asFile(), new FileFilter() {
 
-            private final Pattern filePattern = Pattern.compile(pattern, Pattern.CASE_INSENSITIVE);
+            private final Pattern filePattern = Pattern.compile(inputFilePattern, Pattern.CASE_INSENSITIVE);
 
             public boolean accept(File pathname) {
                 if (recursive && pathname.isDirectory()) {

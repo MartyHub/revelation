@@ -1,7 +1,7 @@
 package org.sweet.revelation.revelation.core.convert.impl;
 
 import java.io.File;
-import java.io.FilenameFilter;
+import java.io.FileFilter;
 
 public class FilenameCompleter {
 
@@ -13,6 +13,8 @@ public class FilenameCompleter {
 
     private String suffix;
 
+    private boolean onlyFolder;
+
     private String pathToPrepend;
 
     public FilenameCompleter(String filename) {
@@ -21,6 +23,12 @@ public class FilenameCompleter {
 
     public FilenameCompleter suffix(String suffix) {
         this.suffix = suffix;
+
+        return this;
+    }
+
+    public FilenameCompleter onlyFolder() {
+        this.onlyFolder = true;
 
         return this;
     }
@@ -75,9 +83,15 @@ public class FilenameCompleter {
     private File[] listFiles() {
         init();
 
-        File[] files = folderToScan.listFiles(new FilenameFilter() {
+        File[] files = folderToScan.listFiles(new FileFilter() {
 
-            public boolean accept(File dir, String name) {
+            public boolean accept(File pathname) {
+                if (onlyFolder && !pathname.isDirectory()) {
+                    return false;
+                }
+
+                String name = pathname.getName();
+
                 return prefix.regionMatches(true, 0, name, 0, prefix.length()) && name.endsWith(suffix);
             }
         });
