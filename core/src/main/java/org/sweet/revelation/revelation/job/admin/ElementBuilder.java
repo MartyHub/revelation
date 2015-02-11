@@ -1,4 +1,4 @@
-package org.sweet.revelation.revelation.job.doc;
+package org.sweet.revelation.revelation.job.admin;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;

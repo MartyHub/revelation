@@ -2,6 +2,9 @@ package org.sweet.revelation.revelation.core.convert.impl;
 
 import org.sweet.revelation.revelation.core.convert.ConvertException;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 public class StringToEnumConverter<E extends Enum<E>> extends SafeStringConverter<E> {
 
     private final Class<E> enumType;
@@ -31,6 +34,20 @@ public class StringToEnumConverter<E extends Enum<E>> extends SafeStringConverte
         }
 
         return result;
+    }
+
+    @Override
+    public String[] complete(String prefix) {
+        E[] enumConstants = enumType.getEnumConstants();
+        Collection<String> result = new ArrayList<String>(enumConstants.length);
+
+        for (E enumConstant : enumConstants) {
+            if (prefix.regionMatches(true, 0, enumConstant.name(), 0, prefix.length())) {
+                result.add(enumConstant.name());
+            }
+        }
+
+        return result.toArray(new String[result.size()]);
     }
 
     @Override

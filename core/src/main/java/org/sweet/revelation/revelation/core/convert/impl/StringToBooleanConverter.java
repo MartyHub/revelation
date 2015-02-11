@@ -2,6 +2,9 @@ package org.sweet.revelation.revelation.core.convert.impl;
 
 import org.sweet.revelation.revelation.core.convert.ConvertException;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 public class StringToBooleanConverter extends SafeStringConverter<Boolean> {
 
     public String getUsage() {
@@ -11,6 +14,20 @@ public class StringToBooleanConverter extends SafeStringConverter<Boolean> {
     @Override
     public String[] getUsageValues() {
         return new String[]{"y", "yes", "true", "n", "no", "false"};
+    }
+
+    @Override
+    public String[] complete(String prefix) {
+        String[] values = getUsageValues();
+        Collection<String> result = new ArrayList<String>(values.length);
+
+        for (String value : values) {
+            if (prefix.regionMatches(true, 0, value, 0, prefix.length())) {
+                result.add(value);
+            }
+        }
+
+        return result.toArray(new String[result.size()]);
     }
 
     @Override

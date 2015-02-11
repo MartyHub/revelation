@@ -1,5 +1,9 @@
 package org.sweet.revelation.revelation.core.main;
 
+import org.fusesource.jansi.AnsiConsole;
+import org.springframework.beans.factory.NoSuchBeanDefinitionException;
+import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.sweet.revelation.revelation.core.convert.ConvertException;
 import org.sweet.revelation.revelation.core.convert.StringConverterRegistry;
 import org.sweet.revelation.revelation.core.convert.StringConverterRegistryBuilder;
@@ -8,9 +12,6 @@ import org.sweet.revelation.revelation.core.event.CommandNotifier;
 import org.sweet.revelation.revelation.core.log.Activity;
 import org.sweet.revelation.revelation.core.log.impl.CompositeActivity;
 import org.sweet.revelation.revelation.core.processor.ProcessorReport;
-import org.springframework.beans.factory.NoSuchBeanDefinitionException;
-import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import java.util.Iterator;
 import java.util.Properties;
@@ -19,7 +20,13 @@ import java.util.StringTokenizer;
 public class Application {
 
     public static void main(String[] args) {
-        new Application().run(new ArrayIterator<String>(args));
+        AnsiConsole.systemInstall();
+
+        try {
+            new Application().run(new ArrayIterator<String>(args));
+        } finally {
+            AnsiConsole.systemUninstall();
+        }
     }
 
     private static final String PACKAGES_TO_SCAN_PROPERTY = "revelation.packages_to_scan";
@@ -52,8 +59,7 @@ public class Application {
         initStringConverterRegistry();
         addShutdownHook();
 
-        context.getBean(ProcessorRunner.class)
-               .run(new ProcessorFinalizer(systemExitDisabled, activity), args);
+        new ProcessorRunner(context).run(new ProcessorFinalizer(systemExitDisabled, activity), args);
     }
 
     private void readProperties(String resourceName) {
@@ -104,7 +110,6 @@ public class Application {
         context.addBeanFactoryPostProcessor(createPropertyConfigurer());
         context.register(RevelationMetadata.class);
         context.register(CommandNotifier.class);
-        context.register(ProcessorRunner.class);
         context.scan(packagesToScan);
         context.refresh();
         context.getBeanFactory()

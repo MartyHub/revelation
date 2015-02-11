@@ -9,6 +9,11 @@ public class StringToFileConverter extends SafeStringConverter<File> {
     }
 
     @Override
+    public String[] complete(String s) {
+        return new FilenameCompleter(s).complete();
+    }
+
+    @Override
     protected File doConvert(String s) {
         return new File(s);
     }

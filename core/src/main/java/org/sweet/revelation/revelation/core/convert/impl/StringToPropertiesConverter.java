@@ -12,6 +12,12 @@ public class StringToPropertiesConverter extends SafeStringConverter<Properties>
     }
 
     @Override
+    public String[] complete(String s) {
+        return new FilenameCompleter(s).suffix(".properties")
+                                       .complete();
+    }
+
+    @Override
     protected Properties doConvert(String s) {
         InputStream is;
         File propertiesFile = new File(s);

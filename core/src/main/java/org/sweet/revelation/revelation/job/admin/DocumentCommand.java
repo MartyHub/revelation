@@ -1,4 +1,4 @@
-package org.sweet.revelation.revelation.job.doc;
+package org.sweet.revelation.revelation.job.admin;
 
 import org.sweet.revelation.revelation.core.Description;
 import org.sweet.revelation.revelation.core.Mandatory;

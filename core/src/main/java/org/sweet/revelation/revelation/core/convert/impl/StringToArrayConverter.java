@@ -47,6 +47,16 @@ public class StringToArrayConverter<T> extends SafeStringConverter<T[]> {
     }
 
     @Override
+    public String getValueSeparator() {
+        return separator;
+    }
+
+    @Override
+    public String[] complete(String prefix) {
+        return elementConverter.complete(prefix);
+    }
+
+    @Override
     @SuppressWarnings("unchecked")
     protected T[] doConvert(String s) {
         StringTokenizer st = new StringTokenizer(s, separator);

@@ -1,5 +1,6 @@
 package org.sweet.revelation.revelation.core.main;
 
+import org.fusesource.jansi.AnsiConsole;
 import org.sweet.revelation.revelation.core.log.Work;
 import org.sweet.revelation.revelation.core.processor.ProcessorReport;
 import org.sweet.revelation.revelation.core.processor.ProcessorStatus;
@@ -28,6 +29,8 @@ public class ProcessorFinalizer {
 
     void exit(final int exitCode) {
         if (!systemExitDisabled && !work.isCancelled()) {
+            AnsiConsole.systemUninstall();
+
             System.exit(exitCode);
         }
     }

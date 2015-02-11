@@ -1,9 +1,13 @@
 package org.sweet.revelation.revelation.core.convert.impl;
 
-import org.sweet.revelation.revelation.core.convert.ConvertException;
+import org.joda.time.LocalDateTime;
 import org.joda.time.base.BaseLocal;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
+import org.sweet.revelation.revelation.core.convert.ConvertException;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 public abstract class StringToJodaConverter<T extends BaseLocal> extends SafeStringConverter<T> {
 
@@ -41,6 +45,23 @@ public abstract class StringToJodaConverter<T extends BaseLocal> extends SafeStr
         }
 
         return result;
+    }
+
+    @Override
+    public String[] complete(String prefix) {
+        Collection<String> result = new ArrayList<String>(formatters.length);
+        LocalDateTime now = LocalDateTime.now();
+
+        for (PatternFormatter patternFormatter : formatters) {
+            final String s = DateTimeFormat.forPattern(patternFormatter.pattern)
+                                           .print(now);
+
+            if (prefix.regionMatches(true, 0, s, 0, prefix.length())) {
+                result.add(s);
+            }
+        }
+
+        return result.toArray(new String[result.size()]);
     }
 
     @Override

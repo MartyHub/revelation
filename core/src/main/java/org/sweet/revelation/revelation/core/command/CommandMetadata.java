@@ -151,7 +151,7 @@ public class CommandMetadata implements Iterable<ParameterMetadata> {
         return sb.toString();
     }
 
-    private ParameterMetadata getParameterMetadata(String name) {
+    public ParameterMetadata getParameterMetadata(String name) {
         ParameterMetadata result = properties.get(name);
 
         if (result == null) {

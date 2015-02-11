@@ -1,4 +1,4 @@
-package org.sweet.revelation.revelation.job.doc;
+package org.sweet.revelation.revelation.job.admin;
 
 import org.joda.time.DateTime;
 import org.joda.time.format.ISODateTimeFormat;

@@ -1,40 +1,43 @@
 package org.sweet.revelation.revelation.core.main;
 
-import org.sweet.revelation.revelation.core.command.CommandLineParameterBuilder;
+import org.springframework.beans.factory.BeanFactory;
+import org.sweet.revelation.revelation.core.command.CommandLineParametersBuilder;
 import org.sweet.revelation.revelation.core.command.InvalidParameterException;
 import org.sweet.revelation.revelation.core.command.Parameter;
 import org.sweet.revelation.revelation.core.command.ValidationException;
 import org.sweet.revelation.revelation.core.convert.StringConverterRegistry;
 import org.sweet.revelation.revelation.core.event.CommandNotifier;
-import org.sweet.revelation.revelation.core.log.Activity;
 import org.sweet.revelation.revelation.core.processor.InvalidProcessorException;
 import org.sweet.revelation.revelation.core.processor.ProcessorMetadata;
 import org.sweet.revelation.revelation.core.processor.ProcessorReport;
 import org.sweet.revelation.revelation.core.text.MaxLengthBuilder;
 import org.sweet.revelation.revelation.core.text.UncapitalizeBuilder;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.stereotype.Component;
 
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-@Component
-@Lazy
 public class ProcessorRunner {
 
-    @Autowired
     private RevelationMetadata revelationMetadata;
 
-    @Autowired
     private CommandNotifier commandNotifier;
 
-    @Autowired
     private StringConverterRegistry registry;
 
-    @Autowired
-    private Activity activity;
+    private final String usage;
+
+    ProcessorRunner(BeanFactory beanFactory) {
+        this(beanFactory.getBean(RevelationMetadata.class), beanFactory.getBean(CommandNotifier.class), beanFactory.getBean(StringConverterRegistry
+                .class), "Usage : run FILE COMMAND [PARAMETER]");
+    }
+
+    public ProcessorRunner(RevelationMetadata revelationMetadata, CommandNotifier commandNotifier, StringConverterRegistry registry, String usage) {
+        this.revelationMetadata = revelationMetadata;
+        this.commandNotifier = commandNotifier;
+        this.registry = registry;
+        this.usage = usage;
+    }
 
     public void run(ProcessorFinalizer processorFinalizer, Iterator<String> args) {
         if (!args.hasNext()) {
@@ -106,7 +109,7 @@ public class ProcessorRunner {
     }
 
     private Parameter[] parseParameters(Iterator<String> args) {
-        CommandLineParameterBuilder builder = new CommandLineParameterBuilder();
+        CommandLineParametersBuilder builder = new CommandLineParametersBuilder(true);
 
         while (args.hasNext()) {
             builder.addArg(args.next());
@@ -116,7 +119,7 @@ public class ProcessorRunner {
     }
 
     private String getUsage() {
-        return "Usage : run FILE COMMAND [PARAMETER]";
+        return usage;
     }
 
     private String listAvailableCommands() {

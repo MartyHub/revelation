@@ -1,60 +1,64 @@
 package org.sweet.revelation.revelation.core.command;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
 public class CommandLineParameterBuilder {
 
-    private final Collection<String> args;
-
-    public CommandLineParameterBuilder() {
-        this.args = new ArrayList<String>();
+    public static CommandLineParameterBuilder builder(final boolean strict) {
+        return new CommandLineParameterBuilder(strict);
     }
 
-    public CommandLineParameterBuilder addArg(String name, String value) {
-        if (name == null) {
-            throw new IllegalArgumentException("Name is mandatory");
-        }
+    private final boolean strict;
 
-        args.add(new StringBuilder("-").append(name)
-                                       .append("=")
-                                       .append(value == null ? "" : value)
-                                       .toString());
+    private StringBuilder sb;
+
+    public CommandLineParameterBuilder(final boolean strict) {
+        this.strict = strict;
+    }
+
+    public CommandLineParameterBuilder arg(String s) {
+        this.sb = new StringBuilder(s);
 
         return this;
     }
 
-    public CommandLineParameterBuilder addArg(String s) {
-        if (s != null) {
-            args.add(s);
-        }
+    public CommandLineParameterBuilder arg(String name, String value) {
+        this.sb = new StringBuilder("-").append(name)
+                                        .append("=")
+                                        .append(value);
 
         return this;
     }
 
-    public Parameter[] build() {
-        Collection<Parameter> parameters = new ArrayList<Parameter>(args.size());
-
-        for (String arg : args) {
-            parameters.add(parseParameter(arg));
+    public Parameter build() {
+        if (strict) {
+            validate();
         }
 
-        return parameters.toArray(new Parameter[parameters.size()]);
-    }
+        String name = null;
+        String value = null;
 
-    private Parameter parseParameter(String s) {
-        validateParameter(s);
+        if (sb != null) {
+            final int index = sb.indexOf("=");
 
-        final int index = s.indexOf('=');
-        final String name = s.substring(1, index);
-        final String value = s.substring(index + 1);
+            if (index > 1) {
+                name = sb.substring(1, index);
+
+                if (index < sb.length()) {
+                    value = sb.substring(index + 1);
+                }
+            }
+        }
 
         return new Parameter(name, value);
     }
 
-    private void validateParameter(String s) {
-        if (s == null || s.charAt(0) != '-' || s.indexOf('=') < 2) {
-            throw new InvalidParameterException(String.format("Invalid parameter <%s>, syntax is <-name=value>", s));
+    @Override
+    public String toString() {
+        return sb == null ? "null" : sb.toString();
+    }
+
+    private void validate() {
+        if (sb == null || sb.length() == 0 || sb.charAt(0) != '-' || sb.indexOf("=") < 2) {
+            throw new InvalidParameterException(String.format("Invalid parameter <%s>, syntax is <-name=value>", sb.toString()));
         }
     }
 }

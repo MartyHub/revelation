@@ -24,6 +24,11 @@
         </dependency>
 
         <dependency>
+            <groupId>jline</groupId>
+            <artifactId>jline</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
         </dependency>
@@ -39,11 +44,6 @@
             <groupId>org.slf4j</groupId>
             <artifactId>jcl-over-slf4j</artifactId>
             <version>${slf4j.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.fusesource.jansi</groupId>
-            <artifactId>jansi</artifactId>
         </dependency>
 
         <!-- test -->

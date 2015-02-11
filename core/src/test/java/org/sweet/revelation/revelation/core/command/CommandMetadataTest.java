@@ -1,12 +1,12 @@
 package org.sweet.revelation.revelation.core.command;
 
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 import org.sweet.revelation.revelation.core.Description;
 import org.sweet.revelation.revelation.core.Mandatory;
 import org.sweet.revelation.revelation.core.convert.StringConverterRegistry;
 import org.sweet.revelation.revelation.core.convert.StringConverterRegistryBuilder;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
 
 public class CommandMetadataTest {
 
@@ -19,8 +19,8 @@ public class CommandMetadataTest {
 
     @Test
     public void validParameters_shouldCreateValidBean() throws InstantiationException, IllegalAccessException {
-        Object bean = new CommandMetadata(registry, Bean.class).create(new CommandLineParameterBuilder().addArg("property", "value")
-                                                                                                        .build());
+        Object bean = new CommandMetadata(registry, Bean.class).create(new CommandLineParametersBuilder(true).addArg("property", "value")
+                                                                                                             .build());
 
         Assert.assertNotNull(bean);
         Assert.assertTrue(bean instanceof Bean);
@@ -29,8 +29,8 @@ public class CommandMetadataTest {
 
     @Test(expected = ValidationException.class)
     public void bean_shouldBeValidated() throws InstantiationException, IllegalAccessException {
-        new CommandMetadata(registry, NestedBean.class).create(new CommandLineParameterBuilder().addArg("property", "value")
-                                                                                                .build());
+        new CommandMetadata(registry, NestedBean.class).create(new CommandLineParametersBuilder(true).addArg("property", "value")
+                                                                                                     .build());
     }
 
     @Test

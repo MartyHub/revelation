@@ -23,6 +23,14 @@ public abstract class SafeStringConverter<T> implements StringConverter<T> {
         return new String[0];
     }
 
+    public String getValueSeparator() {
+        return null;
+    }
+
+    public String[] complete(String prefix) {
+        return new String[0];
+    }
+
     protected T getDefault() {
         return null;
     }

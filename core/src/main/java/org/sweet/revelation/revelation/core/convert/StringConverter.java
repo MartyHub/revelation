@@ -7,4 +7,8 @@ public interface StringConverter<T> {
     String getUsage();
 
     String[] getUsageValues();
+
+    String getValueSeparator();
+
+    String[] complete(String prefix);
 }
